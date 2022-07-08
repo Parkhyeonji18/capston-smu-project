@@ -1,0 +1,102 @@
+<!--위험물등록 페이지입니다.-->
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+	<title>위험물 등록하기</title>
+	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="{% static 'css/manage_danger_map.css' %}">
+
+</head>
+<script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<script>
+	
+var apiGeolocationSuccess = function(position) {
+	var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    document.getElementById('danger_loc').value=String(latitude)+","+String(longitude);
+	//alert("API geolocation success!\n\nlat = " + position.coords.latitude + "\nlng = " + position.coords.longitude);
+};
+
+var tryAPIGeolocation = function() {
+    jQuery.post( "https://www.googleapis.com/geolocation/v1/geolocate?key={{google}}", function(success) {
+        apiGeolocationSuccess({coords: {latitude: success.location.lat, longitude: success.location.lng}});
+    })
+    .fail(function(err) {
+        alert("API Geolocation error! \n\n"+err);
+    });
+};
+
+var browserGeolocationSuccess = function(position) {
+    var latitude = position.coords.latitude;
+    var longitude = position.coords.longitude;
+    document.getElementById('danger_loc').value=String(latitude)+","+String(longitude);
+};
+
+var browserGeolocationFail = function(error) {
+    switch (error.code) {
+        case error.TIMEOUT:
+            alert("Browser geolocation error !\n\nTimeout.");
+            break;
+        case error.PERMISSION_DENIED:
+            if(error.message.indexOf("Only secure origins are allowed") == 0) {
+                tryAPIGeolocation();
+            }
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Browser geolocation error !\n\nPosition unavailable.");
+            break;
+    }
+};
+
+	navigator.geolocation.getCurrentPosition(
+		browserGeolocationSuccess,
+		browserGeolocationFail,
+		{maximumAge: 50000, timeout: 20000, enableHighAccuracy: true});
+
+
+
+</script>
+<body>
+
+
+	<div class="top_box">
+		<a href="{% url 'danger_map' %}"><img class="goback" src="{% static 'img/icon_goback.svg' %}"></a>
+		<p class="box_title">위험물 등록하기</p>
+	</div>
+
+	<div class="">
+		<form action = "/register_danger/" method="POST" enctype = "multipart/form-data">
+			{% csrf_token %}
+			<p>
+				<label for="danger_img">
+					<span>위험물 유형:</span>
+					<select id="danger_type" name="danger_type">
+						<option value="cctv없음">cctv없음</option>
+						<option value="가로등없음">가로등없음</option>
+						<option value="주의시설">주의시설</option>
+						<option value="쓰레기적치">쓰레기적치</option>
+						<option value="유해시설">유해시설</option>
+					</select>
+				</label>
+			</p>
+			<p>
+				<label for = "danger_type">
+					<span>이미지 첨부:</span>
+					<input type="file" name="danger_img">
+				</label>
+			</p>
+			<p>
+				<label for = "danger_loc">
+					<span>현재 내 위치:</span>
+					<input type="text" id='danger_loc' name="danger_loc" readonly/>
+				</label>
+			</p>
+			<hr>
+			<input class="" type="submit" value="등록">
+		</form>
+	</div>
+</body>
+</html>

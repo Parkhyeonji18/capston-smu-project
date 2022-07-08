@@ -1,0 +1,39 @@
+<!--마이 페이지입니다.-->
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>마이페이지</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="{% static 'css/mypage.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="top_box">
+        <a href="{% url 'donglevel'%}"><img class="goback" src="{% static 'img/icon_goback.svg' %}"></a>
+        <img class="user_icon" src="{% static 'img/icon_user.png' %}">
+        
+        {% load socialaccount %}
+        {% if request.user.is_authenticated %}
+            <a class="log" href="{% url 'logout'%}">로그아웃</a>
+            </a>
+            <p class="user_msg">{{ user.username }}님 </p>
+        {% else %}
+            <a class="log" href="{% provider_login_url 'kakao' method='oauth2' %}">
+            <img src="{% static 'img/logo_kakao.png' %}" style="width: 4.0rem; vertical-align: middle;">&nbsp카카오 로그인</a>
+            <p class="user_msg">로그인해주세요.</p>
+        {% endif %}
+
+    </div>
+    <div class="menu">
+        <a href="{% url 'manage_alarm' %}"><div class="menu_item">알림 설정</div></a>
+        <a href="{% url 'manage_danger_map' %}"><div class="menu_item">위험물지도 관리</div></a>
+        <a href="{% url 'manage_protecter' %}"><div class="menu_item">보호자 설정</div></a>
+    </div>
+</body>
+
+</html>

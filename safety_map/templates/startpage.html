@@ -1,0 +1,32 @@
+<!--첫화면 페이지입니다.-->
+<!DOCTYPE html>
+
+<html>
+{% load static %}
+
+<head>
+    <title>거기어때?!</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{% static 'css/startpage.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap">
+</head>
+
+<body>
+    <div class="startbox" >
+        <h2>거기어때?!</h2>
+        <div class="to_home">
+            <a href="{% url 'donglevel' %}"><img class="startlogo" src="{% static 'img/startlogo' %}"><br>
+                <h3>지도 바로가기</h3>
+            </a>
+        </div>
+    
+        <button class="start-btn" type="button">
+            이용안내
+        </button>
+        <br>
+        <br>
+
+    </div>
+</body>
+
+</html>

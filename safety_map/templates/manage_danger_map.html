@@ -1,0 +1,42 @@
+<!--위험물지도관리 페이지입니다.-->
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+	<title>위험물지도 관리</title>
+	<meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="{% static 'css/manage_danger_map.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap"
+        rel="stylesheet">
+</head>
+<body>
+	<div class="top_box">
+        <a href="{% url 'mypage'%}"><img class="goback" src="{% static 'img/icon_goback.svg' %}"></a>
+		<p class="box_title">내가 등록한 위험물 관리</p>
+    </div>
+
+    <div class="item_title_box">
+        <p class="title_photo">등록 사진</p>
+        <p class="title_type">위험물 유형</p>
+    </div>
+
+    <!--내가 등록한 위험물 예시-->
+    <table>
+        {% for list in user_danger_list %}
+        <div class="danger_item_box">
+          
+                    <div class="danger_photo"><img  src="{{list.danger_img.url}}" style="width: 5rem;"></div>
+                    <p class="danger_type">{{list.danger_type}}</p>
+                    <p class="danger_date">{{list.create_at|make_list|slice:':4'|join:"" }}년 {{list.create_at|make_list|slice:'5:7'|join:"" }}월 {{list.create_at|make_list|slice:'8:10'|join:""}}일</p>
+                    <input class="danger_delete_btn" type="submit" value = "삭제"  >
+                      
+        </div>
+
+        {% endfor %}
+    </table>
+    
+    
+</body>
+</html>
