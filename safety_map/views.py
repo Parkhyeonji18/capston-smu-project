@@ -291,7 +291,7 @@ def danger_map(request):
 
 
 def register_danger(request):
-    google_key = config['GOOGLE']['GOOGLE_KEY']
+    google_key = "AIzaSyDowloTHNuWV_qvQacjkcvmUQhiY1nCdbw"
     if request.method == "POST":
         post_danger_type = request.POST['danger_type']
         post_danger_loc = request.POST['danger_loc']
@@ -303,13 +303,12 @@ def register_danger(request):
         model_test_instance = Danger(danger_type=post_danger_type, danger_img=post_danger_img,
                                      danger_loc=danger_string,
                                      auth_user_id_fk=authUser_instance)
-
         model_test_instance.save()
 
         return danger_map(request)
 
     else:
-        return render(request, 'register_danger.html', {'google': google_key})
+        return render(request, 'register_danger.html', {'google': 'AIzaSyDowloTHNuWV_qvQacjkcvmUQhiY1nCdbw'})
 
     # return render(request, 'register_danger.html', {'g':g.latlng})
 
@@ -322,8 +321,8 @@ def detail_danger(request, danger_id):
 def pathSetting(request):
     map = folium.Map(location=g.latlng, zoom_start=15)
     maps = map._repr_html_()
-    api_key = config['DATABASE']['APPKEY']
-    return render(request, 'pathfinder.html', {'map': maps, 'api_key': api_key})
+    api_key = 'AIzaSyDowloTHNuWV_qvQacjkcvmUQhiY1nCdbw'
+    return render(request, 'pathfinder.html', {'map': maps, 'api_key': 'AIzaSyDowloTHNuWV_qvQacjkcvmUQhiY1nCdbw'})
 
 
 def pathFinder(request):  # 위험지역 받는 함수
@@ -434,40 +433,40 @@ def logout(request):
     return render(request, 'startpage.html')
 
 
-def sendSms(string):
-    url = "https://sens.apigw.ntruss.com/sms/v2/services/" + config['NAVER']['SERVICE_ID'] + "/messages"
-    uri = "/sms/v2/services/" + config['NAVER']['SERVICE_ID'] + "/messages"
-    timestamp = str(int(time.time() * 1000))
-    access_key = config['NAVER']['ACCESS_KEY']
-    string_to_sign = "POST " + uri + "\n" + timestamp + "\n" + access_key
-    signature = make_signature(string_to_sign)
-
-    user = AuthUser.objects.filter(username=string).get()
-    name = string
-    phone = user.protecter_num
-    phone = "0" + str(phone)
-    message = name + "님이 위험지역에 계십니다.".format(name, "2020-00-00")
-    headers = {
-        'Content-Type': "application/json; charset=UTF-8",
-        'x-ncp-apigw-timestamp': timestamp,
-        'x-ncp-iam-access-key': access_key,
-        'x-ncp-apigw-signature-v2': signature
-    }
-
-    body = {
-        "type": "SMS",
-        "contentType": "COMM",
-        "from": config['NAVER']['PHONE_NUMBER'],
-        "content": message,
-        "messages": [{"to": phone}]
-    }
-
-    body = json.dumps(body)
-
-    response = requests.post(url, headers=headers, data=body)
-    response.raise_for_status()
-
-    return True
+# def sendSms(string):
+#     url = "https://sens.apigw.ntruss.com/sms/v2/services/" + config['NAVER']['SERVICE_ID'] + "/messages"
+#     uri = "/sms/v2/services/" + config['NAVER']['SERVICE_ID'] + "/messages"
+#     timestamp = str(int(time.time() * 1000))
+#     access_key = config['NAVER']['ACCESS_KEY']
+#     string_to_sign = "POST " + uri + "\n" + timestamp + "\n" + access_key
+#     signature = make_signature(string_to_sign)
+#
+#     user = AuthUser.objects.filter(username=string).get()
+#     name = string
+#     phone = user.protecter_num
+#     phone = "0" + str(phone)
+#     message = name + "님이 위험지역에 계십니다.".format(name, "2020-00-00")
+#     headers = {
+#         'Content-Type': "application/json; charset=UTF-8",
+#         'x-ncp-apigw-timestamp': timestamp,
+#         'x-ncp-iam-access-key': access_key,
+#         'x-ncp-apigw-signature-v2': signature
+#     }
+#
+#     body = {
+#         "type": "SMS",
+#         "contentType": "COMM",
+#         "from": config['NAVER']['PHONE_NUMBER'],
+#         "content": message,
+#         "messages": [{"to": phone}]
+#     }
+#
+#     body = json.dumps(body)
+#
+#     response = requests.post(url, headers=headers, data=body)
+#     response.raise_for_status()
+#
+#     return True
 
 
 def checkDanger(request):
@@ -492,9 +491,9 @@ def checkDanger(request):
     return HttpResponse(json.dumps({'flag': flag, 'msg': msg}), content_type="application/json")
 
 
-def make_signature(string):
-    secret_key = bytes(config['NAVER']['SECRET_KEY'], 'UTF-8')
-    string = bytes(string, 'UTF-8')
-    string_hmac = hmac.new(secret_key, string, digestmod=hashlib.sha256).digest()
-    string_base64 = base64.b64encode(string_hmac).decode('UTF-8')
-    return string_base64
+# def make_signature(string):
+#     secret_key = bytes(config['NAVER']['SECRET_KEY'], 'UTF-8')
+#     string = bytes(string, 'UTF-8')
+#     string_hmac = hmac.new(secret_key, string, digestmod=hashlib.sha256).digest()
+#     string_base64 = base64.b64encode(string_hmac).decode('UTF-8')
+#     return string_base64
